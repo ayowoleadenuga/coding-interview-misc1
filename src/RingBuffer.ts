@@ -12,20 +12,30 @@
  * The ordering of the push operations must be kept.
  */
 export class RingBuffer<T> {
+    private buffer: Array<any>;
+    private capacity: number;
 
     constructor(capacity: number) {
+        this.capacity = capacity
+        this.buffer = []
     }
 
     public push(value: T) {
-
+        this.buffer.push(value)
+        if(this.buffer.length > this.capacity)
+            this.buffer.shift()
     }
 
     public peek(): T | undefined {
         // not implemented
+        if(this.buffer.length > 0)
+            return this.buffer[this.buffer.length-1]
         return undefined;
     }
 
     public pop(): T | undefined {
+        if(this.buffer.length > 0)
+            return this.buffer.pop()
         // not implemented
         return undefined;
     }

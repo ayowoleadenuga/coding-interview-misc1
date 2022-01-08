@@ -25,7 +25,32 @@ export namespace TextMergeJoin {
      *
      */
     export function doMergeWords(data: ReadonlyArray<IPDFTextWord>): ReadonlyArray<IPDFTextWord> {
-        return [];
+        //sort array in ascending order based on x
+        const copy = [...data]
+        copy.sort((a,b) => a.x-b.x);
+        const result = []
+        const skips: number[] = []
+        for (let i = 0; i < copy.length; i++) {
+            if(skips.includes(i))
+                continue
+            if(i === copy.length-1){
+                result.push(copy[i])
+                continue
+            }
+
+            const diff = copy[i].x + copy[i].width - copy[i+1].x
+            if(diff > 0) {
+                result.push({
+                    ...copy[i],
+                    width: copy[i].width + copy[i+1].width,
+                    str: copy[i].str+copy[i+1].str
+                })
+                skips.push(i+1)
+            } else {
+                result.push(copy[i])
+            }
+        }
+        return result;
     }
 
 }

@@ -31,10 +31,33 @@ export namespace DeepCopy {
      * - If you are given an object as input it should return an object as output.
      *
      */
+     function deepCopyObject(source: any): any {
+        const copy: any = {}
+        Object.keys(source).forEach(key => {
+            copy[key] = deepCopy(source[key])
+        })
+        return copy
+    }
+
+    function deepCopyArray(source: any): any {
+        const copy = []
+        for (let i = 0; i < source.length; i++) {
+            copy[i] = deepCopy(source[i])            
+        }
+        return copy
+    }
+
     export function deepCopy<T extends any>(source: T): T {
 
         // TODO: implement this function from the above function definition.
-        return {} as T;
+        //check if source is an object
+        let copy = source
+        if(typeof source === 'object') 
+            copy = deepCopyObject(source)
+        //check if source is an array
+        if(Array.isArray(source))
+            copy = deepCopyArray(source)
+        return copy;
     }
 
 }
